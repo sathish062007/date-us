@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Web Between Us — Together, even when we're apart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+</head>
+<body>
+
+  <!-- Top App Bar / Safe Area Header -->
+  <header id="global-header" class="global-header">
+    <div class="header-left">
+      <span class="app-logo-icon">❤️</span>
+      <div class="brand-text">
+        <h1 class="app-title">Web Between Us</h1>
+        <span class="app-tagline" id="header-tagline">Together, even when we're apart</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="connection-pill" class="status-pill online" title="Network Connection Status">
+        <span class="status-dot"></span>
+        <span class="status-text" id="connection-text">Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Network Banner for Offline/Reconnection -->
+  <div id="network-banner" class="network-banner hidden" role="alert">
+    <span class="banner-icon" id="banner-icon">📡</span>
+    <span class="banner-message" id="banner-message">You're offline. Local video and offline chat are still available.</span>
+  </div>
+
+  <!-- Main View Container -->
+  <main id="app-container" class="app-container">
+
+    <!-- ==================== 1. AUTH SCREEN ==================== -->
+    <section id="view-auth" class="view-screen">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-heart">❤️</div>
+          <h2>Welcome to Web Between Us</h2>
+          <p class="auth-subtitle">Watch local movies together, chat, and stay connected with your partner from anywhere.</p>
+        </div>
+
+        <form id="auth-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="auth-email">Email Address</label>
+            <input type="email" id="auth-email" class="form-input" placeholder="Enter your email" autocomplete="email" required>
+            <span class="input-error" id="auth-email-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="auth-name">Your Name / Nickname</label>
+            <input type="text" id="auth-name" class="form-input" placeholder="e.g. Sathish or Honey" autocomplete="nickname" required>
+            <span class="input-error" id="auth-name-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" class="form-input" placeholder="Enter password" autocomplete="current-password" required>
+            <span class="input-error" id="auth-password-error"></span>
+          </div>
+
+          <div class="auth-actions">
+            <button type="submit" id="btn-signin" class="btn btn-primary btn-block">Sign In</button>
+            <button type="button" id="btn-create-account" class="btn btn-secondary btn-block">Create Account</button>
+          </div>
+
+          <div class="auth-footer-links">
+            <button type="button" id="btn-forgot-password" class="link-btn">Forgot Password?</button>
+            <span class="divider-dot">•</span>
+            <button type="button" id="btn-demo-login" class="link-btn highlight">Quick Demo Mode</button>
+          </div>
+        </form>
+
+        <div class="auth-note">
+          <span class="note-icon">🔒</span>
+          <span>Private & secure. Local video files stay directly on your phone and are never uploaded to servers.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. HOME SCREEN ==================== -->
+    <section id="view-home" class="view-screen hidden">
+      <div class="home-content">
+        
+        <!-- Welcome Greeting -->
+        <div class="welcome-card">
+          <div class="welcome-header">
+            <div>
+              <span class="welcome-badge">Couples Hub</span>
+              <h2 class="welcome-title">Welcome back <span class="heart-inline">❤️</span></h2>
+              <p class="welcome-user" id="home-user-name">Ready for movie night?</p>
+            </div>
+            <div class="avatar-circle" id="user-avatar-initial">S</div>
+          </div>
+        </div>
+
+        <!-- Active Room Banner (shown when in a room) -->
+        <div id="active-room-card" class="active-room-card hidden">
+          <div class="active-room-badge">
+            <span class="status-dot"></span>
+            <span>ACTIVE ROOM</span>
+          </div>
+          <div class="active-room-info">
+            <h3 id="active-room-title">❤️ Connected to Room</h3>
+            <p class="room-code-display">Code: <strong id="active-room-code">WB67-LOVE</strong></p>
+          </div>
+          <div class="active-room-actions">
+            <button type="button" class="btn btn-sm btn-primary" id="btn-home-enter-room">Open Room</button>
+            <button type="button" class="btn btn-sm btn-outline" id="btn-home-leave-room">Leave</button>
+          </div>
+        </div>
+
+        <!-- Primary Action Cards -->
+        <div class="action-grid">
+          <div class="action-card primary" id="card-create-room">
+            <div class="card-icon">➕</div>
+            <div class="card-text">
+              <h3>Create Room</h3>
+              <p>Get a private room code to share with your partner</p>
+            </div>
+            <span class="card-arrow">›</span>
+          </div>
+
+          <div class="action-card secondary" id="card-join-room">
+            <div class="card-icon">🔗</div>
+            <div class="card-text">
+              <h3>Join Room</h3>
+              <p>Enter your partner's code to connect together</p>
+            </div>
+            <span class="card-arrow">›</span>
+          </div>
+        </div>
+
+        <!-- Feature Hub Cards -->
+        <h4 class="section-title">Quick Features</h4>
+        <div class="features-grid">
+          <div class="feature-item" id="nav-shortcut-watch">
+            <div class="feature-icon-wrapper red">
+              <span class="feature-icon">🎬</span>
+            </div>
+            <span class="feature-label">Watch Together</span>
+            <span class="feature-desc">Sync local videos</span>
+          </div>
+
+          <div class="feature-item" id="nav-shortcut-chat">
+            <div class="feature-icon-wrapper pink">
+              <span class="feature-icon">💬</span>
+            </div>
+            <span class="feature-label">Chat & Emojis</span>
+            <span class="feature-desc">Private couple chat</span>
+          </div>
+
+          <div class="feature-item" id="nav-shortcut-offline">
+            <div class="feature-icon-wrapper blue">
+              <span class="feature-icon">📱</span>
+            </div>
+            <span class="feature-label">Offline Videos</span>
+            <span class="feature-desc">Watch without internet</span>
+          </div>
+
+          <div class="feature-item" id="nav-shortcut-settings">
+            <div class="feature-icon-wrapper purple">
+              <span class="feature-icon">⚙️</span>
+            </div>
+            <span class="feature-label">Settings</span>
+            <span class="feature-desc">Controls & storage</span>
+          </div>
+        </div>
+
+        <!-- Network & Diagnostics Status Card -->
+        <div class="info-card">
+          <div class="info-header">
+            <h4>Connection & Architecture</h4>
+            <span class="info-tag" id="network-chip-state">🟢 Online</span>
+          </div>
+          <p class="info-text">
+            <strong>Local Movie Mode:</strong> Both phones play their own copy of the movie. Only lightweight sync signals (Play, Pause, Seek) and chat messages travel over the network for fast, low-data streaming.
+          </p>
+          <div class="sim-controls">
+            <button type="button" id="btn-toggle-sim-offline" class="btn btn-xs btn-outline">
+              Simulate Network Offline
+            </button>
+            <button type="button" id="btn-test-multi-tab" class="btn btn-xs btn-outline" title="Open partner window in new tab to test live sync">
+              Open Partner Tab ↗
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 3. WATCH TOGETHER SCREEN ==================== -->
+    <section id="view-watch" class="view-screen hidden">
+      <div class="watch-container">
+
+        <!-- Couple Room Header -->
+        <div class="couple-room-header" id="watch-room-header">
+          <div class="room-presence-info">
+            <div class="presence-tag">
+              <span class="heart-icon">❤️</span>
+              <span id="room-users-label">You + Partner</span>
+            </div>
+            <div class="room-code-chip" id="btn-copy-header-code" title="Click to copy room code">
+              <span class="code-label">Room:</span>
+              <span class="code-val" id="watch-header-room-code">WB67-LOVE</span>
+              <span class="copy-icon">📋</span>
+            </div>
+          </div>
+          <div class="room-status-badge">
+            <span class="status-dot" id="partner-status-dot"></span>
+            <span id="partner-status-text">Waiting for partner</span>
+          </div>
+        </div>
+
+        <!-- Video Player Section -->
+        <div class="video-player-wrapper">
+          
+          <!-- Empty State / File Selector Overlay -->
+          <div id="video-empty-state" class="video-empty-state">
+            <div class="empty-icon">🍿</div>
+            <h3>Select a Local Movie</h3>
+            <p>Select a video file stored on your device to start watching together.</p>
+            <div class="video-empty-actions">
+              <label for="video-file-input" class="btn btn-primary btn-file">
+                <span>📁 Choose Video File</span>
+                <input type="file" id="video-file-input" accept="video/*" class="sr-only">
+              </label>
+              <button type="button" id="btn-load-sample-movie" class="btn btn-secondary">
+                🎬 Load Demo Movie
+              </button>
+            </div>
+            <div id="partner-video-notice" class="partner-video-notice hidden">
+              <span class="notice-icon">🔔</span>
+              <span id="partner-video-notice-text">Partner has loaded a video! Tap "Load Demo Movie" or choose your file to sync.</span>
+            </div>
+            <span class="file-help-text">Local MP4, WebM, MKV, MOV supported • 0 MB streaming data used</span>
+          </div>
+
+          <!-- HTML5 Video Element -->
+          <video id="main-video" class="main-video hidden" playsinline webkit-playsinline></video>
+
+          <!-- Video Overlay Alerts / Remote Events -->
+          <div id="video-overlay-toast" class="video-overlay-toast hidden">
+            <span id="video-toast-icon">▶</span>
+            <span id="video-toast-msg">Partner played video</span>
+          </div>
+
+          <!-- Custom Mobile Video Controls -->
+          <div id="custom-video-controls" class="custom-video-controls hidden">
+            <!-- Progress Bar with Scrubbing -->
+            <div class="progress-bar-container" id="video-progress-container">
+              <div class="progress-buffered" id="video-buffered-bar"></div>
+              <div class="progress-played" id="video-progress-bar"></div>
+              <div class="progress-scrubber" id="video-scrubber-handle"></div>
+            </div>
+
+            <!-- Controls Row -->
+            <div class="controls-main-row">
+              <div class="controls-left">
+                <button type="button" id="btn-video-play-pause" class="btn-ctrl" aria-label="Play or Pause">
+                  <span id="ctrl-play-icon">▶</span>
+                </button>
+                <button type="button" id="btn-video-rewind" class="btn-ctrl btn-ctrl-secondary" aria-label="Rewind 10 seconds" title="Rewind 10s">
+                  -10s
+                </button>
+                <button type="button" id="btn-video-forward" class="btn-ctrl btn-ctrl-secondary" aria-label="Fast forward 10 seconds" title="Forward 10s">
+                  +10s
+                </button>
+                <div class="time-display">
+                  <span id="current-time-text">00:00</span>
+                  <span class="time-divider">/</span>
+                  <span id="duration-time-text">00:00</span>
+                </div>
+              </div>
+
+              <div class="controls-right">
+                <button type="button" id="btn-video-mute" class="btn-ctrl" aria-label="Mute / Unmute">
+                  <span id="ctrl-volume-icon">🔊</span>
+                </button>
+                <button type="button" id="btn-video-fullscreen" class="btn-ctrl" aria-label="Fullscreen">
+                  ⛶
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Info & Sync Bar -->
+        <div class="video-meta-bar">
+          <div class="meta-left">
+            <div class="now-playing-title" id="now-playing-title">No video loaded</div>
+            <div class="sync-status-indicator" id="sync-status-indicator">
+              <span class="sync-dot"></span>
+              <span id="sync-status-text">Shared playback control enabled</span>
+            </div>
+          </div>
+          <div class="meta-right">
+            <label for="video-file-input-change" class="btn btn-xs btn-outline">
+              Change Video
+              <input type="file" id="video-file-input-change" accept="video/*" class="sr-only">
+            </label>
+          </div>
+        </div>
+
+        <!-- Shared Control Mode Notice -->
+        <div class="control-mode-banner">
+          <div class="mode-info">
+            <span class="mode-icon">🎮</span>
+            <div>
+              <strong id="ctrl-mode-title">Shared Controls: ON</strong>
+              <p id="ctrl-mode-desc">Both you and your partner can Play, Pause, and Seek.</p>
+            </div>
+          </div>
+          <div class="offline-badge" id="watch-offline-badge" style="display:none;">
+            🔴 Offline Mode
+          </div>
+        </div>
+
+        <!-- Quick Chat & Reactions in Watch Mode -->
+        <div class="watch-quick-chat">
+          <div class="quick-chat-header">
+            <span>Live Room Chat</span>
+            <button type="button" class="btn-link" id="btn-jump-to-chat">Open Full Chat ›</button>
+          </div>
+          <div class="quick-chat-preview" id="watch-recent-message">
+            <span class="msg-sender">System:</span>
+            <span class="msg-text">Send a message or emoji to your partner! 🍿❤️</span>
+          </div>
+          <div class="quick-reactions-row">
+            <button type="button" class="reaction-chip" data-emoji="❤️">❤️ Love</button>
+            <button type="button" class="reaction-chip" data-emoji="🍿">🍿 Popcorn</button>
+            <button type="button" class="reaction-chip" data-emoji="🥰">🥰 Cute</button>
+            <button type="button" class="reaction-chip" data-emoji="😂">😂 Laugh</button>
+            <button type="button" class="reaction-chip" data-emoji="🔥">🔥 Lit</button>
+          </div>
+          <div class="watch-chat-input-row">
+            <input type="text" id="watch-quick-chat-input" class="form-input watch-input" placeholder="Type a message while watching..." maxlength="200">
+            <button type="button" id="btn-watch-quick-send" class="btn btn-sm btn-primary">Send</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 4. CHAT SCREEN ==================== -->
+    <section id="view-chat" class="view-screen hidden">
+      <div class="chat-container">
+
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-header-user">
+            <div class="partner-avatar">
+              <span>❤️</span>
+              <span class="partner-presence-dot online" id="chat-partner-presence-dot"></span>
+            </div>
+            <div class="chat-partner-info">
+              <h3 id="chat-partner-name">Partner ❤️</h3>
+              <span class="chat-partner-status" id="chat-partner-status-text">Online</span>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <span class="sync-pill" id="chat-sync-status">All synced ✓</span>
+          </div>
+        </div>
+
+        <!-- Chat Messages Scroll Area -->
+        <div class="chat-messages-area" id="chat-messages-area">
+          <div class="chat-date-divider"><span>Today</span></div>
+          <!-- Dynamic chat bubbles will be inserted here -->
+        </div>
+
+        <!-- Emoji Picker Drawer (Collapsible) -->
+        <div id="emoji-picker-container" class="emoji-picker-container hidden">
+          <div class="emoji-picker-header">
+            <span>Quick Emojis</span>
+            <button type="button" id="btn-close-emoji" class="btn-icon">✕</button>
+          </div>
+          <div class="emoji-grid" id="emoji-grid">
+            <button type="button" class="emoji-btn">❤️</button>
+            <button type="button" class="emoji-btn">🥰</button>
+            <button type="button" class="emoji-btn">😍</button>
+            <button type="button" class="emoji-btn">😂</button>
+            <button type="button" class="emoji-btn">😭</button>
+            <button type="button" class="emoji-btn">😄</button>
+            <button type="button" class="emoji-btn">😘</button>
+            <button type="button" class="emoji-btn">🤍</button>
+            <button type="button" class="emoji-btn">🫶</button>
+            <button type="button" class="emoji-btn">🔥</button>
+            <button type="button" class="emoji-btn">🎬</button>
+            <button type="button" class="emoji-btn">🍿</button>
+            <button type="button" class="emoji-btn">😊</button>
+            <button type="button" class="emoji-btn">😴</button>
+            <button type="button" class="emoji-btn">👍</button>
+            <button type="button" class="emoji-btn">✨</button>
+            <button type="button" class="emoji-btn">🎉</button>
+            <button type="button" class="emoji-btn">🌙</button>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="chat-input-bar">
+          <button type="button" id="btn-toggle-emoji" class="btn-chat-action" aria-label="Toggle emoji picker" title="Insert Emoji">
+            😊
+          </button>
+          <div class="input-wrapper">
+            <textarea id="chat-text-input" rows="1" placeholder="Type a message..." maxlength="1000"></textarea>
+          </div>
+          <button type="button" id="btn-send-chat" class="btn-send" aria-label="Send message" title="Send">
+            <span class="send-icon">➤</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 5. SETTINGS SCREEN ==================== -->
+    <section id="view-settings" class="view-screen hidden">
+      <div class="settings-container">
+        
+        <h2 class="settings-title">Settings</h2>
+
+        <!-- Profile Section -->
+        <div class="settings-section">
+          <h4 class="settings-section-heading">Profile</h4>
+          <div class="settings-card">
+            <div class="profile-row">
+              <div class="avatar-circle large" id="settings-avatar-initial">S</div>
+              <div class="profile-details">
+                <strong id="settings-user-name">Sathish</strong>
+                <span id="settings-user-email">sathish@example.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Room & Playback Controls -->
+        <div class="settings-section">
+          <h4 class="settings-section-heading">Room & Playback</h4>
+          <div class="settings-card">
+            
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-title">Controller Mode</span>
+                <span class="setting-desc">Who can control video playback</span>
+              </div>
+              <div class="setting-ctrl">
+                <select id="setting-controller-mode" class="form-select">
+                  <option value="creator" selected>Room Creator Only</option>
+                  <option value="both">Both Control</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-title">Current Room Code</span>
+                <span class="setting-desc" id="settings-room-code-desc">WB67-LOVE</span>
+              </div>
+              <div class="setting-ctrl">
+                <button type="button" id="btn-settings-copy-code" class="btn btn-xs btn-outline">Copy</button>
+              </div>
+            </div>
+
+            <div class="setting-row danger">
+              <div class="setting-info">
+                <span class="setting-title">Leave Current Room</span>
+                <span class="setting-desc">Disconnect from active session</span>
+              </div>
+              <div class="setting-ctrl">
+                <button type="button" id="btn-settings-leave-room" class="btn btn-xs btn-danger">Leave</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Preferences & Appearance -->
+        <div class="settings-section">
+          <h4 class="settings-section-heading">Preferences</h4>
+          <div class="settings-card">
+            
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-title">Dark Mode</span>
+                <span class="setting-desc">Comfortable night viewing</span>
+              </div>
+              <div class="setting-ctrl">
+                <label class="switch">
+                  <input type="checkbox" id="setting-dark-mode">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-title">In-App Notifications</span>
+                <span class="setting-desc">Show remote pause/play alerts</span>
+              </div>
+              <div class="setting-ctrl">
+                <label class="switch">
+                  <input type="checkbox" id="setting-notifications" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Offline & Storage -->
+        <div class="settings-section">
+          <h4 class="settings-section-heading">Offline Storage</h4>
+          <div class="settings-card">
+            
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-title">IndexedDB Offline Chat</span>
+                <span class="setting-desc" id="settings-db-status">Active — persistent local messages</span>
+              </div>
+              <div class="setting-ctrl">
+                <button type="button" id="btn-clear-local-chat" class="btn btn-xs btn-outline">Clear Chat</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="settings-section">
+          <div class="settings-card">
+            <button type="button" id="btn-signout" class="btn btn-secondary btn-block">Sign Out</button>
+          </div>
+        </div>
+
+        <div class="app-version-footer">
+          <p><strong>Web Between Us</strong> v1.0.0</p>
+          <p class="footer-tagline">“Together, even when we're apart.”</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+  <nav id="bottom-nav" class="bottom-nav hidden" aria-label="Main Navigation">
+    <button type="button" class="nav-tab active" data-view="home" id="nav-tab-home">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button type="button" class="nav-tab" data-view="watch" id="nav-tab-watch">
+      <span class="nav-icon">🎬</span>
+      <span class="nav-label">Watch</span>
+    </button>
+    <button type="button" class="nav-tab" data-view="chat" id="nav-tab-chat">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Chat</span>
+      <span class="nav-badge hidden" id="chat-nav-badge">0</span>
+    </button>
+    <button type="button" class="nav-tab" data-view="settings" id="nav-tab-settings">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </button>
+  </nav>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Create Room Modal -->
+  <div id="modal-create-room" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-create-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-create-title">Your Private Room</h3>
+        <button type="button" class="modal-close" id="btn-close-create-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">Share this room code with your partner so they can join your private couple room.</p>
+        
+        <div class="room-code-box">
+          <span class="code-box-label">ROOM CODE</span>
+          <div class="code-box-val" id="created-room-code">WB67-LOVE</div>
+        </div>
+
+        <div class="modal-room-status" id="create-modal-partner-status">
+          <span class="status-dot pulsating"></span>
+          <span id="create-modal-status-text">Waiting for your partner…</span>
+        </div>
+
+        <div class="modal-button-group">
+          <button type="button" id="btn-modal-copy-code" class="btn btn-secondary btn-block">
+            📋 Copy Code
+          </button>
+          <button type="button" id="btn-modal-share-room" class="btn btn-secondary btn-block">
+            📤 Share Room Link
+          </button>
+          <button type="button" id="btn-modal-enter-room" class="btn btn-primary btn-block">
+            Enter Room
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Join Room Modal -->
+  <div id="modal-join-room" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-join-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-join-title">Join Your Partner</h3>
+        <button type="button" class="modal-close" id="btn-close-join-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">Enter the room code shared by your partner (e.g. WB67-LOVE):</p>
+        
+        <form id="join-room-form" class="join-form" novalidate>
+          <div class="form-group">
+            <input type="text" id="join-room-code-input" class="form-input code-input" placeholder="WB67-LOVE" maxlength="15" autocomplete="off" autocorrect="off" autocapitalize="characters" required>
+            <span class="input-error" id="join-error-text"></span>
+          </div>
+
+          <div id="join-connecting-state" class="join-status-state hidden">
+            <span class="spinner"></span>
+            <span id="join-state-text">Connecting…</span>
+          </div>
+
+          <button type="submit" id="btn-submit-join" class="btn btn-primary btn-block">Join Room</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Generic Confirmation Dialog -->
+  <div id="modal-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card confirm-card">
+      <div class="modal-header">
+        <h3 id="confirm-dialog-title">Confirm Action</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-dialog-message">Are you sure you want to proceed?</p>
+        <div class="confirm-actions">
+          <button type="button" id="btn-confirm-cancel" class="btn btn-outline">Cancel</button>
+          <button type="button" id="btn-confirm-ok" class="btn btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
